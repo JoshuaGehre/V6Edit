@@ -7,6 +7,11 @@
 #include "../generator/ScriptGen.h"
 #include "../generator/SoundDefines.h"
 
+// 0 for 16x16 minesveeper tiles
+// 1 for 18x18 minesveeper tiles
+// 2 for 20x20, but I find them too large
+#define TILE_OFFSET 1
+
 std::vector<std::string> loadTextFile(const std::string& fileName)
 {
 	std::vector<std::string> content;
@@ -283,7 +288,7 @@ void Minesveeper::generateScripts(const std::string& path)
 			std::string posName = std::to_string(x) + "_" + std::to_string(y);
 			ScriptBuilder render_xy(true, "render_" + posName);
 			render_xy.everybodysad();
-			render_xy.createentity(24 + 32 * x, 44 + 32 * y, 21);
+			render_xy.createentity(24 + 32 * x - TILE_OFFSET, 44 + 32 * y - TILE_OFFSET, 21);
 			int nextX = x + 1;
 			int nextY = y;
 			if(nextX == 8) {
@@ -586,7 +591,7 @@ void Minesveeper::generateScripts(const std::string& path)
 				for(int x = 0; x < 8; x++) {
 					char c = text[l + 1 + y][x];
 					tutorial.push_back("everybodysad");
-					tutorial.push_back("createentity(" + std::to_string(24 + 32 * x) + "," + std::to_string(44 + 32 * y) + ",21)");
+					tutorial.push_back("createentity(" + std::to_string(24 + 32 * x - TILE_OFFSET) + "," + std::to_string(44 + 32 * y - TILE_OFFSET) + ",21)");
 					int tileId = 0;
 					int colorId = 0;
 #define SetAEM(A, B, C) \
@@ -613,7 +618,7 @@ void Minesveeper::generateScripts(const std::string& path)
 				}
 			}
 			tutorial.push_back("everybodysad");
-			tutorial.push_back("createentity(288,132,21)");
+			tutorial.push_back("createentity(" + std::to_string(288 - TILE_OFFSET) + "," + std::to_string(132 - TILE_OFFSET) +  ",21)");
 			if(digMode) {
 				tutorial.push_back("changetile(#,45)");
 				tutorial.push_back("changecolour(#,39)");
